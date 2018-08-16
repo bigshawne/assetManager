@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asset.Main">
+   <content>
+      <TableView fx:id="table" prefHeight="476.0" prefWidth="594.0">
+        <columns>
+          <TableColumn fx:id="tc_id" prefWidth="46.39999508857727" sortable="false" />
+          <TableColumn fx:id="tc_item" prefWidth="142.40002059936523" sortable="false" text="Item" />
+            <TableColumn fx:id="tc_des" prefWidth="172.00001525878906" sortable="false" text="Description" />
+            <TableColumn fx:id="tc_formula" minWidth="0.0" prefWidth="87.99993896484375" sortable="false" text="Formula" />
+            <TableColumn fx:id="tc_amount" prefWidth="139.2000732421875" sortable="false" text="Amount" />
+        </columns>
+      </TableView>
+   </content>
+</ScrollPane>
