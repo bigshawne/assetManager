@@ -18,8 +18,22 @@ public class Node {
     }
 
     public String getStr(){return this.str;}
+    public void setStr(String str){this.str = str;}
 
     public Node getLhs() {return this.lhs;}
+    public void setLhs(Node lhs) {this.lhs = lhs;}
 
     public Node getRhs(){return this.rhs;}
+    public void setRhs(Node rhs){this.rhs = rhs;}
+
+    public boolean isDigit(){
+        char c = this.str.charAt(0);
+        return Character.isDigit(c);
+    }
+
+    public boolean isLeaf(){
+        return (this.lhs == null && this.rhs == null);
+    }
+
+
 }

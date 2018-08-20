@@ -14,7 +14,6 @@ import java.sql.Statement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import parsing.amount;
 
 import javax.xml.transform.Result;
 
@@ -56,6 +55,7 @@ public class assetDAO {
         return ids;
     }
 
+    /*
     public amount getAmount(int id){
         amount a = null;
         String sql = "SELECT id, formula, amount FROM asset where id = ";
@@ -71,7 +71,7 @@ public class assetDAO {
         }
         return a;
     }
-    
+    */
     public ObservableList<row> getTable(){
         ObservableList<row> table = FXCollections.observableArrayList();
         ObservableList<Integer> ids = getIds();
