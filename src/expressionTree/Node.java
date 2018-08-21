@@ -7,7 +7,7 @@ public class Node {
 
     public Node(){}
 
-    private Node(String str){
+    public Node(String str){
         this.str = str;
     }
 
