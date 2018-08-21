@@ -1,8 +1,5 @@
 package expressionTree;
-import jdk.nashorn.internal.ir.LiteralNode;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -10,8 +7,7 @@ public class Tree {
     private String s = "";
     private Node root = null;
     private String str;
-    private LinkedList<String> exp = new LinkedList<String>();
-    private HashSet<String> tree = new HashSet<String>();
+    private LinkedList<String> exp;
 
     public Tree(String str) {
         exp = toList(str);
@@ -40,17 +36,18 @@ public class Tree {
         }
     }
 
-    public int evaulate() {
+    public double evaulate() {
         return evaulate(root);
     }
 
-    public int evaulate(Node node) {
+    public double evaulate(Node node) {
         if (node.isDigit())
-            return Integer.parseInt(node.getStr());
+            return node.evaulate();
         else {
             switch (node.getStr()) {
                 case "+":
-                    return evaulate(node.getLhs()) + evaulate(node.getRhs());
+                    double amount = evaulate(node.getLhs()) + evaulate(node.getRhs());
+                    return amount;
                 case "-":
                     return evaulate(node.getLhs()) - evaulate(node.getRhs());
                 case "*":
@@ -93,6 +90,7 @@ public class Tree {
     public static void main(String[] args){
         Tree t = new Tree("    1 + 1 * 2");
         System.out.print(t.evaulate());
+        Integer.parseInt("+");
     }
 
 

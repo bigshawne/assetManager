@@ -7,6 +7,7 @@ package sqlasset;
 
 //import javafx.beans.property.SimpleDoubleProperty;
 //import javafx.beans.property.SimpleIntegerProperty;
+import expressionTree.Tree;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -21,16 +22,19 @@ public class row {
     private final SimpleStringProperty rForm;
     private final SimpleStringProperty rAmount;
     
-    public row(String rID, String rItem, String rDes, String rForm, String rAmount){
+    public row(String rID, String rItem, String rDes, String r_form, String rAmount){
         this.rID = new SimpleStringProperty(rID);
         this.rItem = new SimpleStringProperty(rItem);
         this.rDes = new SimpleStringProperty(rDes);
-        this.rForm = new SimpleStringProperty(rForm);
-
-        if(!rForm.isEmpty()){
-            //String rForm = deleteWhite(rForm);
+        this.rForm = new SimpleStringProperty(r_form);
+        if(r_form==null){
+            this.rAmount = new SimpleStringProperty(rAmount);
+        }else{
+            Tree t = new Tree(r_form);
+            double no = t.evaulate();
+            this.rAmount = new SimpleStringProperty(String.valueOf(no));
         }
-        this.rAmount = new SimpleStringProperty(rAmount);
+
     }
     
     public String getId(){return this.rID.get();}

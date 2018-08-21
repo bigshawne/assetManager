@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import expressionTree.amount;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -55,7 +57,7 @@ public class assetDAO {
         return ids;
     }
 
-    /*
+
     public amount getAmount(int id){
         amount a = null;
         String sql = "SELECT id, formula, amount FROM asset where id = ";
@@ -64,14 +66,18 @@ public class assetDAO {
             ResultSet r = stmt.executeQuery(whereclause);
             r.next();
             cell form = new cell(r.getString(2));
-            a = new amount(r.getInt(1),form.toString(), r.getDouble(3));
+            cell amount = new cell(r.getDouble(3));
+            if(form.toString() == null)
+                a = new amount(amount.getNo());
+            else
+                a = new amount(form.toString());
         }catch(SQLException ex){
-            showMessageDialog("Could not get all id: " + ex.getMessage());
+            showMessageDialog("Could not get the amount: " + ex.getMessage());
             ex.printStackTrace();
         }
         return a;
     }
-    */
+
     public ObservableList<row> getTable(){
         ObservableList<row> table = FXCollections.observableArrayList();
         ObservableList<Integer> ids = getIds();

@@ -1,5 +1,7 @@
 package expressionTree;
 
+import sqlasset.assetDAO;
+
 public class Node {
     private String str;
     private Node lhs;
@@ -31,6 +33,17 @@ public class Node {
         return Character.isDigit(c);
     }
 
-
+    //无法实现运算字符串中包含当前表格
+    public double evaulate(){
+        try{
+            int id = Integer.parseInt(this.str);
+            assetDAO model = new assetDAO();
+            model.connect();
+            amount a = model.getAmount(id);
+            return a.evaulate();
+        }catch(NumberFormatException ex){
+            return 0;
+        }
+    }
 
 }
