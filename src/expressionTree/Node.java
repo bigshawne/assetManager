@@ -17,16 +17,16 @@ public class Node {
         this.str = str;
     }
 
-    private String getStr(){return this.str;}
-    private void setStr(String str){this.str = str;}
+    public String getStr(){return this.str;}
+    public void setStr(String str){this.str = str;}
 
-    private Node getLhs() {return this.lhs;}
-    private void setLhs(Node lhs) {this.lhs = lhs;}
+    public Node getLhs() {return this.lhs;}
+    public void setLhs(Node lhs) {this.lhs = lhs;}
 
-    private Node getRhs(){return this.rhs;}
-    private void setRhs(Node rhs){this.rhs = rhs;}
+    public Node getRhs(){return this.rhs;}
+    public void setRhs(Node rhs){this.rhs = rhs;}
 
-    private boolean isDigit(){
+    public boolean isDigit(){
         char c = this.str.charAt(0);
         return Character.isDigit(c);
     }
