@@ -67,7 +67,7 @@ public class assetDAO {
             r.next();
             cell form = new cell(r.getString(2));
             cell amount = new cell(r.getDouble(3));
-            if(form.toString() == null)
+            if(form.toString() == null || form.toString() == "")
                 a = new amount(amount.getNo());
             else
                 a = new amount(form.toString());
@@ -100,20 +100,59 @@ public class assetDAO {
         }
         return table;
     }
-    
-    public void updateDes(String d, int id){
+
+    private String newDes = "UPDATE asset SET description = (?) WHERE id = (?)";
+    PreparedStatement nPDes;
+    public void updateDes(String str, int id){
         connect();
-        String des = "UPDATE asset SET description =";
-        String whereClause = "WHERE is = ";
         try{
-            String sql = des + d + whereClause + id;
-            stmt.executeUpdate(sql);
-        }catch(SQLException ex){
-            System.out.println("Error when update description.");
-            ex.printStackTrace();
+            nPDes.setString(1, str);
+            nPDes.setInt(2, id);
+            nPDes.executeUpdate();
+        }catch (SQLException ex) {
+            showMessageDialog("Could update description: " + ex.getMessage());
         }
     }
-    
+
+    private String newItem = "UPDATE asset SET item = (?) WHERE id = (?)";
+    PreparedStatement nPItem;
+    public void updateItem(String str, int id){
+        connect();
+        try{
+            nPItem.setString(1, str);
+            nPItem.setInt(2, id);
+            nPItem.executeUpdate();
+        }catch (SQLException ex) {
+            showMessageDialog("Could update item: " + ex.getMessage());
+        }
+    }
+
+    private String newForm = "UPDATE asset SET formula = (?) WHERE id = (?)";
+    PreparedStatement nPForm;
+    public void updateForm(String str, int id){
+        connect();
+        try{
+            nPForm.setString(1, str);
+            nPForm.setInt(2, id);
+            nPForm.executeUpdate();
+        }catch (SQLException ex) {
+            showMessageDialog("Could update formula: " + ex.getMessage());
+        }
+    }
+
+    private String newAmount = "UPDATE asset SET amount = (?) WHERE id = (?)";
+    PreparedStatement nPAmount;
+    public void updateAmount(String str, int id){
+        connect();
+        try{
+            nPAmount.setDouble(1, Double.parseDouble(str));
+            nPAmount.setInt(2, id);
+            nPAmount.executeUpdate();
+        }catch (SQLException ex) {
+            showMessageDialog("Could update amount: " + ex.getMessage());
+        }
+    }
+
     public void connect() {
        try {
            Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -128,8 +167,10 @@ public class assetDAO {
            connection = DriverManager.getConnection(url);
            stmt = connection.createStatement();
            des = connection.prepareStatement(desString);
-           //newItStmt = connection.prepareStatement(newItSQL);
-           //checkoutStmt = connection.prepareStatement(checkoutSQL);
+           nPDes = connection.prepareStatement(newDes);
+           nPItem = connection.prepareStatement(newItem);
+           nPForm = connection.prepareStatement(newForm);
+           nPAmount = connection.prepareStatement(newAmount);
        } catch (SQLException ex) {
            showMessageDialog("Unable to connect to database. Application will exit.");
            System.exit(0);

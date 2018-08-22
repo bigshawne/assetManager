@@ -85,13 +85,4 @@ public class Tree {
         }
         return node;
     }
-
-
-    public static void main(String[] args){
-        Tree t = new Tree("    1 + 1 * 2");
-        System.out.print(t.evaulate());
-        Integer.parseInt("+");
-    }
-
-
 }

@@ -6,6 +6,7 @@
 package asset;
 
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import sqlasset.assetDAO;
 import sqlasset.cell;
 import java.net.URL;
@@ -46,11 +47,6 @@ public class Main implements Initializable {
     @FXML
     private TableColumn<row, String> tc_amount;
     
-        
-    
-    
-    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         model = new assetDAO();
@@ -66,13 +62,44 @@ public class Main implements Initializable {
         //Make each cell editable
         table.setEditable(true);
         tc_id.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_item.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_des.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_formula.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_amount.setCellFactory(TextFieldTableCell.forTableColumn());
+        tc_id.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
+                ((row) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setId(t.getNewValue()));
 
+
+        tc_item.setCellFactory(TextFieldTableCell.forTableColumn());
+        tc_item.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
+                ((row) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setItem(String.valueOf(t.getNewValue())));
+
+        tc_des.setCellFactory(TextFieldTableCell.forTableColumn());
+        tc_des .setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
+                ((row) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setDes(t.getNewValue()));
+
+        tc_formula.setCellFactory(TextFieldTableCell.forTableColumn());
+        tc_formula.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
+                ((row) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setForm(t.getNewValue()));
+
+        tc_amount.setCellFactory(TextFieldTableCell.forTableColumn());
+        tc_amount.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
+                ((row) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                ).setAmount(t.getNewValue()));
+
+
+
+        
         ObservableList<row>t = model.getTable();
         table.setItems(t);
-    }    
+
+    }
+
+
     
 }

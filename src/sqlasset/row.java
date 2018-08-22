@@ -16,6 +16,7 @@ import javafx.beans.property.StringProperty;
  * @author user
  */
 public class row {
+    assetDAO model = new assetDAO();
     private final SimpleStringProperty rID;
     private final SimpleStringProperty rItem;
     private final SimpleStringProperty rDes;
@@ -27,7 +28,7 @@ public class row {
         this.rItem = new SimpleStringProperty(rItem);
         this.rDes = new SimpleStringProperty(rDes);
         this.rForm = new SimpleStringProperty(r_form);
-        if(r_form==null){
+        if(r_form==null || r_form==""){
             this.rAmount = new SimpleStringProperty(rAmount);
         }else{
             Tree t = new Tree(r_form);
@@ -52,9 +53,14 @@ public class row {
     public String getAmount(){return this.rAmount.get();}
     public StringProperty rAmountProperty(){return this.rAmount;}
     
-    public void setId(String id){this.rID.set(id);}
+    public void setId(String id){
+        this.rID.set(id);
+    }
     
-    public void setItem(String item){this.rItem.set(item);}
+    public void setItem(String item){
+        this.rItem.set(item);
+        model.updateItem(item, Integer.parseInt(rID.getName()));
+    }
     
     public void setDes(String des){this.rDes.set(des);}
     
