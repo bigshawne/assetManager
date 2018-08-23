@@ -16,24 +16,25 @@ import javafx.beans.property.StringProperty;
  * @author user
  */
 public class row {
-    assetDAO model = new assetDAO();
+    private assetDAO model = new assetDAO();
     private final SimpleStringProperty rID;
     private final SimpleStringProperty rItem;
     private final SimpleStringProperty rDes;
     private final SimpleStringProperty rForm;
     private final SimpleStringProperty rAmount;
     
-    public row(String rID, String rItem, String rDes, String r_form, String rAmount){
+    row(String rID, String rItem, String rDes, String r_form, String rAmount){
         this.rID = new SimpleStringProperty(rID);
         this.rItem = new SimpleStringProperty(rItem);
         this.rDes = new SimpleStringProperty(rDes);
         this.rForm = new SimpleStringProperty(r_form);
-        if(r_form==null || r_form==""){
+        if(r_form==null || r_form.equals("")){
             this.rAmount = new SimpleStringProperty(rAmount);
         }else{
             Tree t = new Tree(r_form);
             double no = t.evaulate();
             this.rAmount = new SimpleStringProperty(String.valueOf(no));
+            model.updateAmount(String.valueOf(no), Integer.parseInt(this.rID.getValue()));
         }
 
     }
@@ -59,14 +60,24 @@ public class row {
     
     public void setItem(String item){
         this.rItem.set(item);
-        model.updateItem(item, Integer.parseInt(rID.getName()));
+        int id = Integer.parseInt(rID.getValue());
+        model.updateItem(item, id);
+    }
+
+    public void setDes(String des){
+        this.rDes.set(des);
+        model.updateDes(des, Integer.parseInt(rID.getValue()));
     }
     
-    public void setDes(String des){this.rDes.set(des);}
+    public void setForm(String form){
+        this.rForm.set(form);
+        model.updateForm(form, Integer.parseInt(rID.getValue()));
+    }
     
-    public void setForm(String form){this.rForm.set(form);}
-    
-    public void setAmount(String amount){this.rAmount.set(amount);}
+    public void setAmount(String amount){
+        this.rAmount.set(amount);
+        model.updateAmount(amount, Integer.parseInt(rID.getValue()));
+    }
 
 
 }

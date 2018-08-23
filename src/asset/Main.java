@@ -6,25 +6,19 @@
 package asset;
 
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
 import sqlasset.assetDAO;
-import sqlasset.cell;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import sqlasset.row;
 
 /**
  *
- * @author user
+ * @author Shawn S Zhang
  */
 public class Main implements Initializable {
     private assetDAO model;
@@ -46,7 +40,13 @@ public class Main implements Initializable {
     
     @FXML
     private TableColumn<row, String> tc_amount;
-    
+
+    private void refresh(){
+        ObservableList<row>t = model.getTable();
+        table.setItems(t);
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         model = new assetDAO();
@@ -59,42 +59,43 @@ public class Main implements Initializable {
         tc_formula.setCellValueFactory(cellData->cellData.getValue().rFormProperty());
         tc_amount.setCellValueFactory(cellData->cellData.getValue().rAmountProperty());
 
+
         //Make each cell editable
         table.setEditable(true);
         tc_id.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_id.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
-                ((row) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setId(t.getNewValue()));
+        tc_id.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->{
+            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setId(t.getNewValue());
+            refresh();
+        });
 
 
         tc_item.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_item.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
-                ((row) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setItem(String.valueOf(t.getNewValue())));
+        tc_item.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) -> {
+            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setItem(String.valueOf(t.getNewValue()));
+            refresh();
+        });
 
         tc_des.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_des .setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
-                ((row) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setDes(t.getNewValue()));
+        tc_des .setOnEditCommit((TableColumn.CellEditEvent<row, String> t) -> {
+            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setDes(t.getNewValue());
+            refresh();
+        });
+
 
         tc_formula.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_formula.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
-                ((row) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setForm(t.getNewValue()));
+        tc_formula.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) -> {
+            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setForm(t.getNewValue());
+            refresh();
+        });
 
         tc_amount.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_amount.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->
-                ((row) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())
-                ).setAmount(t.getNewValue()));
+        tc_amount.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) -> {
+            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setAmount(t.getNewValue());
+            refresh();
+        }
+        );
 
 
-
-        
         ObservableList<row>t = model.getTable();
         table.setItems(t);
 
