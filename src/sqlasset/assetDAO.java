@@ -26,25 +26,55 @@ import javax.xml.transform.Result;
 public class assetDAO {
     private Connection connection;
     private Statement stmt;
-    
+    private int tableLen;
     public assetDAO(){
         
     }
-    
-    private String desString = "INSERT INTO asset (description) VALUES (?);";
-    PreparedStatement des;
-    public void insertDes(String d){
+
+    private String newId = "INSERT INTO asset (id) VALUES (?)";
+    PreparedStatement nID;
+    public void insertNewLine(int id){
         connect();
         try{
-            des.setString(1, d);
-            des.executeUpdate();
+            nID.setInt(1, id);
+            nID.executeUpdate();
         }catch (SQLException ex) {
-            System.out.print("Error in insert description");
+            showMessageDialog("Could not insert new line: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
+
+    public row getRow(int id){
+        String sql = "SELECT item, description, formula, amount FROM asset WHERE id = ";
+        String whereclause = sql + id;
+        row row = null;
+        try{
+            ResultSet r = stmt.executeQuery(whereclause);
+            r.next();
+            cell item = new cell(r.getString(1));
+            cell des = new cell(r.getString(2));
+            cell form = new cell(r.getString(3));
+            cell amount = new cell(r.getDouble(4));
+            row = new row(String.valueOf(id), item.toString(), des.toString(), form.toString(), amount.toString());
+        }catch(SQLException ex){
+            showMessageDialog("Could not fetch the row: " + ex.getMessage());
+        }
+        return row;
+    }
+
+    public void deleteEmpty(int id){
+        String sql = "DELETE FROM asset WHERE id = ";
+        String whereClause = sql + id;
+        try{
+            stmt.executeUpdate(whereClause);
+        }catch(SQLException ex){
+            showMessageDialog("Could not delete the row: " + ex.getMessage());
+        }
+    }
+
     
     public ObservableList<Integer> getIds(){
+        connect();
         ObservableList<Integer> ids = FXCollections.observableArrayList();
         String sql = "SELECT id FROM asset";
         try{
@@ -54,9 +84,39 @@ public class assetDAO {
         }catch (SQLException ex) {
             showMessageDialog("Could not get all id: " + ex.getMessage());
         }
+        tableLen = ids.size();
         return ids;
     }
 
+    public ObservableList<row> getTable(){
+        connect();
+        ObservableList<row> table = FXCollections.observableArrayList();
+        ObservableList<Integer> ids = getIds();
+        for(Integer i: ids){
+            String sql = "SELECT id, item, description, formula, amount FROM asset WHERE id = " + i;
+            try{
+                ResultSet r = stmt.executeQuery(sql);
+                r.next();
+                cell id = new cell(r.getInt(1));
+                cell item = new cell(r.getString(2));
+                cell des = new cell(r.getString(3));
+                cell form = new cell(r.getString(4));
+                cell amount;
+                String al = r.getString(5);
+                if(al == null){
+                    amount = new cell();
+                }else{
+                    amount = new cell(Double.parseDouble(al));
+                }
+                row row =  new row(id.toString(), item.toString(), des.toString(), form.toString(),amount.toString());
+                table.add(row);
+            }catch(SQLException ex){
+                showMessageDialog("Could not get all id: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+        return table;
+    }
 
     public amount getAmount(int id){
         amount a = null;
@@ -78,34 +138,12 @@ public class assetDAO {
         return a;
     }
 
-    public ObservableList<row> getTable(){
-        ObservableList<row> table = FXCollections.observableArrayList();
-        ObservableList<Integer> ids = getIds();
-        for(Integer i: ids){
-            String sql = "SELECT id, item, description, formula, amount FROM asset WHERE id = " + i;
-            try{
-                ResultSet r = stmt.executeQuery(sql);
-                r.next();
-                cell id = new cell(r.getInt(1));
-                cell item = new cell(r.getString(2));
-                cell des = new cell(r.getString(3));
-                cell form = new cell(r.getString(4));
-                cell amount = new cell(r.getDouble(5));
-                row row =  new row(id.toString(), item.toString(), des.toString(), form.toString(),amount.toString());
-                table.add(row);
-            }catch(SQLException ex){
-                showMessageDialog("Could not get all id: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-        return table;
-    }
-
     private String newDes = "UPDATE asset SET description = (?) WHERE id = (?)";
     PreparedStatement nPDes;
     public void updateDes(String str, int id){
         connect();
         try{
+            if(str.equals(""))str = null;
             nPDes.setString(1, str);
             nPDes.setInt(2, id);
             nPDes.executeUpdate();
@@ -119,6 +157,7 @@ public class assetDAO {
     public void updateItem(String str, int id){
         connect();
         try{
+            if(str.equals(""))str = null;
             nPItem.setString(1, str);
             nPItem.setInt(2, id);
             nPItem.executeUpdate();
@@ -132,6 +171,7 @@ public class assetDAO {
     public void updateForm(String str, int id){
         connect();
         try{
+            if(str.equals(""))str = null;
             nPForm.setString(1, str);
             nPForm.setInt(2, id);
             nPForm.executeUpdate();
@@ -145,7 +185,10 @@ public class assetDAO {
     public void updateAmount(String str, int id){
         connect();
         try{
-            nPAmount.setDouble(1, Double.parseDouble(str));
+            if(str.equals(""))
+                nPAmount.setString(1, null);
+            else
+                nPAmount.setDouble(1, Double.parseDouble(str));
             nPAmount.setInt(2, id);
             nPAmount.executeUpdate();
         }catch (SQLException ex) {
@@ -166,11 +209,11 @@ public class assetDAO {
            String url = "jdbc:mysql://localhost:3306/asset?user=root&password=cmsc250";
            connection = DriverManager.getConnection(url);
            stmt = connection.createStatement();
-           des = connection.prepareStatement(desString);
            nPDes = connection.prepareStatement(newDes);
            nPItem = connection.prepareStatement(newItem);
            nPForm = connection.prepareStatement(newForm);
            nPAmount = connection.prepareStatement(newAmount);
+           nID = connection.prepareStatement(newId);
        } catch (SQLException ex) {
            showMessageDialog("Unable to connect to database. Application will exit.");
            System.exit(0);
@@ -182,4 +225,5 @@ public class assetDAO {
        alert.setTitle("Error");
        alert.showAndWait();
    }
+
 }

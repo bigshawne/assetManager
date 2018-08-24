@@ -8,6 +8,8 @@ package asset;
 import javafx.scene.control.cell.TextFieldTableCell;
 import sqlasset.assetDAO;
 import java.net.URL;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -43,8 +45,19 @@ public class Main implements Initializable {
 
     private void refresh(){
         ObservableList<row>t = model.getTable();
+        int size = t.size();
+        row last = t.get(size - 1);
+        if(!last.emptyRow()){
+            int newId = t.size() + 1;
+            t.add(new row(String.valueOf(newId), null, null, null, null));
+            model.insertNewLine(newId);
+        }else if(last.emptyRow() && t.get(size - 2).emptyRow()){
+            t.remove(size - 1);
+            model.deleteEmpty(size);
+        }
         table.setItems(t);
     }
+
 
 
     @Override
@@ -62,11 +75,6 @@ public class Main implements Initializable {
 
         //Make each cell editable
         table.setEditable(true);
-        tc_id.setCellFactory(TextFieldTableCell.forTableColumn());
-        tc_id.setOnEditCommit((TableColumn.CellEditEvent<row, String> t) ->{
-            (t.getTableView().getItems().get(t.getTablePosition().getRow())).setId(t.getNewValue());
-            refresh();
-        });
 
 
         tc_item.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -95,11 +103,13 @@ public class Main implements Initializable {
         }
         );
 
-
         ObservableList<row>t = model.getTable();
+
         table.setItems(t);
 
     }
+
+
 
 
     

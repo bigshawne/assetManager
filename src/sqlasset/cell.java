@@ -11,8 +11,8 @@ package sqlasset;
  */
 public class cell {
     private String content;
-    private int id;
-    private double no;
+    private Integer id;
+    private Double no;
     
     public cell(){
         this.content = "";
@@ -24,7 +24,7 @@ public class cell {
     }
     
     public cell(String content){
-        this.content = content;
+       this.content = content;
     }
     
     public cell(double no){

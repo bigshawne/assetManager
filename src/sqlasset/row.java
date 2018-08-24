@@ -10,6 +10,7 @@ package sqlasset;
 import expressionTree.Tree;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -23,7 +24,7 @@ public class row {
     private final SimpleStringProperty rForm;
     private final SimpleStringProperty rAmount;
     
-    row(String rID, String rItem, String rDes, String r_form, String rAmount){
+    public row(String rID, String rItem, String rDes, String r_form, String rAmount){
         this.rID = new SimpleStringProperty(rID);
         this.rItem = new SimpleStringProperty(rItem);
         this.rDes = new SimpleStringProperty(rDes);
@@ -79,5 +80,13 @@ public class row {
         model.updateAmount(amount, Integer.parseInt(rID.getValue()));
     }
 
+    public boolean emptyRow(){
+        return (rItem.getValue() == null) && (rDes.getValue() == null) && (rForm.getValue() == null) && (rAmount.getValue() == "");
+
+    }
+
+    public void resetAmount(){
+        this.rAmount.setValue("");
+    }
 
 }

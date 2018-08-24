@@ -46,8 +46,7 @@ public class Tree {
         else {
             switch (node.getStr()) {
                 case "+":
-                    double amount = evaulate(node.getLhs()) + evaulate(node.getRhs());
-                    return amount;
+                    return evaulate(node.getLhs()) + evaulate(node.getRhs());
                 case "-":
                     return evaulate(node.getLhs()) - evaulate(node.getRhs());
                 case "*":
